@@ -17,3 +17,11 @@ if you get "error while loading shared libraries: libGLEW.so.2.1: cannot open sh
 ```
 sudo ln -s /usr/lib64/libGLEW.so.2.1 /usr/lib/libGLEW.so.2.1
 ```
+
+or add 
+
+```
+#define GLEW_STATIC
+```
+
+to your code before referencing glew.h
