@@ -25,3 +25,18 @@ or add
 ```
 
 to your code before referencing glew.h
+
+Download GLFW sources: https://www.glfw.org/download.html
+
+install additional packages required for compiling GLFW on Linux systems - check first if your system is using X11 or Wayland and install proper package:
+
+```
+sudo apt install xorg-dev
+```
+
+```
+sudo apt install libwayland-dev libxkbcommon-dev wayland-protocols extra-cmake-modules
+```
+
+compile GLFW source: https://www.glfw.org/docs/latest/compile.html
+

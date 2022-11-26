@@ -11,6 +11,7 @@ project(
 #find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
 
 find_package(GLEW REQUIRED)
+find_package(glfw3 3.3 REQUIRED)
 
 add_subdirectory(hello)   # look in hello subdirectory for CMakeLists.txt to process
 add_subdirectory(apps)    # look in apps subdirectory for CMakeLists.txt to process

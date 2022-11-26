@@ -8,6 +8,7 @@ add_executable(main main.cpp)
 # We need hello.h and the hello library
 target_link_libraries(main
     PUBLIC GLEW::GLEW
+    PUBLIC glfw
     PRIVATE hello)
 
 #target_link_libraries(main GLEW::GLEW)
