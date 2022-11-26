@@ -7,6 +7,7 @@ project(main)
 add_executable(main main.cpp)
 # We need hello.h and the hello library
 target_link_libraries(main
+    PUBLIC OpenGL::GL
     PUBLIC GLEW::GLEW
     PUBLIC glfw
     PRIVATE hello)

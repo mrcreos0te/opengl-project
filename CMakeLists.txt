@@ -9,9 +9,14 @@ project(
 
 #find_path(GLEW_INCLUDE_DIR GL/glew.h)
 #find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64)
+message( "finding packages" )
+message( "${CMAKE_FIND_PACKAGE_REDIRECTS_DIR}" )
 
+find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
+
+message( "${glfw3_INCLUDES}" )
 
 add_subdirectory(hello)   # look in hello subdirectory for CMakeLists.txt to process
 add_subdirectory(apps)    # look in apps subdirectory for CMakeLists.txt to process
