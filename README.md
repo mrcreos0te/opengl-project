@@ -40,3 +40,27 @@ sudo apt install libwayland-dev libxkbcommon-dev wayland-protocols extra-cmake-m
 
 compile GLFW source: https://www.glfw.org/docs/latest/compile.html
 
+create build directory
+
+```
+mkdir build
+```
+
+configure project
+
+```
+/usr/bin/cmake --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ -S/source-dir/ -B/build-dir/ -G "Unix Makefiles"
+```
+
+create build files
+
+```
+/usr/bin/cmake --build /build-dir --config Release --target all -j 10 --
+```
+
+build project
+
+```
+cd /build-dir
+make
+```
