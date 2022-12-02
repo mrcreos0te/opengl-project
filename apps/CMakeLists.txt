@@ -10,6 +10,7 @@ target_link_libraries(main
     PUBLIC OpenGL::GL
     PUBLIC GLEW::GLEW
     PUBLIC glfw
+    PUBLIC glm
     PRIVATE hello)
 
 #target_link_libraries(main GLEW::GLEW)

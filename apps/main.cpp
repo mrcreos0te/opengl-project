@@ -4,6 +4,7 @@
 #define GLEW_STATIC
 #include "GL/glew.h"
 #include <GLFW/glfw3.h>
+#include <glm/mat4x4.hpp>
 #include "hello.h"
 
 // Window dimensions
@@ -15,7 +16,7 @@ GLuint VBO, VAO, shader;
 static const char* vShader = "                                                \n\
 #version 330                                                                  \n\
                                                                               \n\
-layout (location = 0) in vec3 pos;											  \n\
+layout (location = 1) in vec3 pos;	layout (location = 2) in vec3 pos1;		  \n\
                                                                               \n\
 void main()                                                                   \n\
 {                                                                             \n\
@@ -48,8 +49,8 @@ void CreateTriangle()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
