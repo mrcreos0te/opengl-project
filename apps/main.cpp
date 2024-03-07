@@ -29,11 +29,12 @@ void main()                                                                   \n
 static const char* fShader = "                                                \n\
 #version 330                                                                  \n\
                                                                               \n\
+uniform vec4 uColor;  // Color passed as a uniform								\n\
 out vec4 colour;                                                               \n\
                                                                               \n\
 void main()                                                                   \n\
 {                                                                             \n\
-    colour = vec4(1.0, 0.0, 0.0, 1.0);                                         \n\
+    colour = uColor;                                         \n\
 }";
 
 void CreateTriangle()
@@ -212,6 +213,17 @@ int main(int, char**) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(shader);
+
+		// Set color as a uniform
+		GLint colorLocation = glGetUniformLocation(shader, "uColor");
+		if (colorLocation != -1)
+		{
+			glUniform4f(colorLocation, 1.0f, 0.0f, 0.0f, 0.0f);  // Red color (RGBA)
+		}
+		else
+		{
+			std::cerr << "Error: Unable to locate uniform variable 'uColor'\n";
+		}
 
 		glBindVertexArray(VAOLine);
 		glDrawArrays(GL_LINES, 0, 2);
