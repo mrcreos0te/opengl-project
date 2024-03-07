@@ -12,6 +12,8 @@ const GLint WIDTH = 800, HEIGHT = 600;
 
 GLuint VBO, VAO, shader;
 
+GLuint VBOLine, VAOLine, shaderLine;
+
 // Vertex Shader code
 static const char* vShader = "                                                \n\
 #version 330                                                                  \n\
@@ -37,9 +39,9 @@ void main()                                                                   \n
 void CreateTriangle()
 {
 	GLfloat vertices[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
+		-0.20f, -0.20f, 0.0f,
+		0.20f, -0.20f, 0.0f,
+		0.0f, 0.20f, 0.0f
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -47,6 +49,30 @@ void CreateTriangle()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(0);
+}
+
+void CreateLine()
+{
+	GLfloat vertices[] = {
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -2.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		-0.8f, 0.0f, 0.0f
+	};
+
+	glGenVertexArrays(1, &VAOLine);
+	glBindVertexArray(VAOLine);
+
+	glGenBuffers(1, &VBOLine);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOLine);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -172,6 +198,7 @@ int main(int, char**) {
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
 	CreateTriangle();
+	CreateLine();
 	CompileShaders();
 
 	// Loop until window closed
@@ -186,6 +213,9 @@ int main(int, char**) {
 
 		glUseProgram(shader);
 
+		glBindVertexArray(VAOLine);
+		glDrawArrays(GL_LINES, 0, 2);
+		glDrawArrays(GL_LINES, 2, 2);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
