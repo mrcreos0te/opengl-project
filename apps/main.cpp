@@ -5,7 +5,10 @@
 #include "GL/glew.h"
 #include <GLFW/glfw3.h>
 #include <glm/mat4x4.hpp>
+#include <line.h>
 #include "hello.h"
+
+using MCRGraphics::Line;
 
 // Window dimensions
 const GLint WIDTH = 800, HEIGHT = 600;
@@ -198,9 +201,7 @@ int main(int, char**) {
 	// Setup Viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
-	CreateTriangle();
-	CreateLine();
-	CompileShaders();
+	Line mcrline;
 
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow))
@@ -212,27 +213,7 @@ int main(int, char**) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glUseProgram(shader);
-
-		// Set color as a uniform
-		GLint colorLocation = glGetUniformLocation(shader, "uColor");
-		if (colorLocation != -1)
-		{
-			glUniform4f(colorLocation, 1.0f, 0.0f, 0.0f, 0.0f);  // Red color (RGBA)
-		}
-		else
-		{
-			std::cerr << "Error: Unable to locate uniform variable 'uColor'\n";
-		}
-
-		glBindVertexArray(VAOLine);
-		glDrawArrays(GL_LINES, 0, 2);
-		glDrawArrays(GL_LINES, 2, 2);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-
-		glUseProgram(0);
+		mcrline.draw();
 
 		glfwSwapBuffers(mainWindow);
 	}

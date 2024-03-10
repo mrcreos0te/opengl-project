@@ -22,3 +22,5 @@ message( "${glfw3_INCLUDES}" )
 add_subdirectory(hello)   # look in hello subdirectory for CMakeLists.txt to process
 add_subdirectory(apps)    # look in apps subdirectory for CMakeLists.txt to process
 add_subdirectory(glm)
+add_subdirectory(graphics)
+add_subdirectory(test_encapsulated)
