@@ -7,11 +7,14 @@
 #include <GLFW/glfw3.h>
 #include <glm/mat4x4.hpp>
 
+typedef std::pair<double, double> Point;
+
 namespace MCRGraphics{
     class Line{
         public:
         Line();
-        std::vector<std::pair<double,double>> vertices;
+        Point startPoint;
+        Point endPoint;
         GLuint VBO, VAO, shader;
         // Vertex Shader code
         const char* vShader = "                                                \n\
@@ -39,6 +42,8 @@ namespace MCRGraphics{
         void defineLine();
         void compileShaders();
         void draw();
+        void setStartPoint(double x, double y);
+        void setEndPoint(double x, double y);
 
 
     };

@@ -13,8 +13,8 @@ Line::Line(){}
 void Line::defineLine(){
 
 GLfloat vertices[] = {
-		-1.0f, -1.0f, 0.0f,
-		1.0f, -2.0f, 0.0f,
+		startPoint.first, startPoint.second, 0.0f,
+		endPoint.first, endPoint.second, 0.0f,
 		0.0f, 1.0f, 0.0f,
 		-0.8f, 0.0f, 0.0f
 	};
@@ -97,6 +97,14 @@ void Line::compileShaders()
 		return;
 	}
 
+}
+
+void Line::setStartPoint(double x, double y){
+    startPoint = Point(x, y);
+}
+
+void Line::setEndPoint(double x, double y){
+    endPoint = Point(x, y);
 }
 
 void Line::draw(){

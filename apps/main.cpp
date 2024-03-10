@@ -6,6 +6,10 @@
 #include <GLFW/glfw3.h>
 #include <glm/mat4x4.hpp>
 #include <line.h>
+#include <fstream>
+#include <iostream>
+#include <fstream>
+#include <ranges>
 #include "hello.h"
 
 using MCRGraphics::Line;
@@ -39,6 +43,23 @@ void main()                                                                   \n
 {                                                                             \n\
     colour = uColor;                                         \n\
 }";
+
+std::vector<std::string> splitString( std::string& input, char delimiter) {
+    std::vector<std::string> result;
+    std::string token;
+    
+    std::size_t pos = 0;
+    while ((pos = input.find(delimiter)) != std::string::npos) {
+        token = input.substr(0, pos);
+        result.push_back(token);
+        input.erase(0, pos + 1);
+    }
+    
+    // Add the last token
+    result.push_back(input);
+
+    return result;
+}
 
 void CreateTriangle()
 {
@@ -203,6 +224,112 @@ int main(int, char**) {
 
 	Line mcrline;
 
+	mcrline.setStartPoint(-1.0, -1.0);
+	mcrline.setEndPoint(1.0, -2.0);
+
+	Line mcrline2;
+
+	mcrline2.setStartPoint(-1.0, -1.0);
+	mcrline2.setEndPoint(0.0, 1.0);
+
+	std::vector<Line> lines;
+
+	std::string path = "/home/janek/repos/opengl/opengl-project/opengl-proj/test_files/triangles2.csv";
+	std::ifstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "Error opening the file." << std::endl;
+        return 1;
+    }
+	auto line_view = std::ranges::istream_view<std::string>(file);
+	bool verticesFound{false};
+
+	std::vector<std::pair<double,double>> points;
+	std::vector<std::pair<int,int>> conn;
+
+    // for (auto line : line_view) {
+	// 	std::cout << line<< std::endl;
+	// 	if(verticesFound){
+	// 		std::cout << "vertices found"<< std::endl;
+	// 		bool startpoint{false};
+	// 		Line mcrline2;
+	// 		if(!line.starts_with("X")&&!line.starts_with("#")){
+	// 			std::cout<<"setting points"<<std::endl;
+	// 			auto words = splitString(line, ',');
+	// 			std::pair<double,double> p(std::stod(words[0]),std::stod(words[1]));
+	// 			points.push_back(p);
+					
+	// 			// mcrline2.setEndPoint(std::stod(words[1]));
+	// 		}
+	// 	}
+		
+	// 	if(line.starts_with("#Ver")){
+	// 		verticesFound = true;
+	// 	}
+	// 	else if(line.starts_with("#Conn")){
+	// 		verticesFound = false;
+	// 		if(!line.starts_with("V")&&!line.starts_with("#")){
+	// 			std::cout<<"setting conn"<<std::endl;
+	// 			auto words = splitString(line, ',');
+	// 			std::pair<int,int> p(std::stoi(words[0]),std::stoi(words[1]));
+	// 			conn.push_back(p);
+	// 		}
+	// 	}   
+    // }
+	auto it = line_view.begin();
+    auto end = line_view.end();
+
+	while(it!=end){
+		auto line = *it;
+		std::cout<<*it<<std::endl;
+		if(line.starts_with("#V")){
+			it++;
+			if((*it).starts_with("X")){
+				it++;
+			}
+			while(!(*it).starts_with("#Conn")){
+				std::cout<<"setting points for line "<<*it<<std::endl;
+				std::cout<<*it<<std::endl;
+				auto words = splitString(*it, ',');
+				std::cout<<words[0]<<" "<<words[1]<<std::endl;
+				std::pair<double,double> p(std::stod(words[0]),std::stod(words[1]));
+				points.push_back(p);
+				it++;
+			}
+			while(it!=end){
+				if((*it).starts_with("#Conn")||(*it).starts_with("V")||(*it).empty()){
+				it++;
+				}
+				else{
+					std::cout<<"setting conn for line "<<*it<<std::endl;
+					auto words = splitString(*it, ',');
+					std::cout<<words[0]<<" "<<words[1]<<" "<<words[2]<<std::endl;
+					std::pair<int,int> p(std::stoi(words[0]),std::stoi(words[1]));
+					conn.push_back(p);
+					std::pair<int,int> p1(std::stoi(words[1]),std::stoi(words[2]));
+					conn.push_back(p1);
+					it++;
+				}
+
+			}
+			
+		}
+		it++;
+	}
+
+    
+    file.close();
+
+	for(auto pair : conn){
+		Line line;
+		std::cout<<std::endl;
+		std::cout<<"startpoint: "<<points[pair.first].first<<" "<<points[pair.first].second<<std::endl;
+		std::cout<<"endpoint: "<<points[pair.second].first<<" "<<points[pair.second].second<<std::endl;
+		std::cout<<std::endl;
+		line.setStartPoint(points[pair.first].first, points[pair.first].second);
+		line.setEndPoint(points[pair.second].first, points[pair.second].second);
+		lines.push_back(line);
+	}
+
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow))
 	{
@@ -213,10 +340,16 @@ int main(int, char**) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		mcrline.draw();
+		// mcrline.draw();
+		// mcrline2.draw();
+
+		for(auto line : lines){
+			line.draw();
+		}
 
 		glfwSwapBuffers(mainWindow);
 	}
 
     return 0;
 }
+

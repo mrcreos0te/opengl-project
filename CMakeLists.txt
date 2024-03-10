@@ -2,8 +2,11 @@
 # so let's require it now.
 cmake_minimum_required(VERSION 3.11-3.18)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 project(
-    VscodeCmakeHello
+    openglProject
     VERSION 0.1
     DESCRIPTION "Small CMake example built with VSCode")
 
@@ -24,3 +27,4 @@ add_subdirectory(apps)    # look in apps subdirectory for CMakeLists.txt to proc
 add_subdirectory(glm)
 add_subdirectory(graphics)
 add_subdirectory(test_encapsulated)
+
