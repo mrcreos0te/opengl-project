@@ -234,7 +234,7 @@ int main(int, char**) {
 
 	std::vector<Line> lines;
 
-	std::string path = "/home/janek/repos/opengl/opengl-project/opengl-proj/test_files/triangles2.csv";
+	std::string path = "/home/janek/repos/opengl/opengl-project/opengl-proj/test_files/triangles4.csv";
 	std::ifstream file(path);
     if (!file.is_open()) {
         std::cerr << "Error opening the file." << std::endl;
@@ -246,35 +246,7 @@ int main(int, char**) {
 	std::vector<std::pair<double,double>> points;
 	std::vector<std::pair<int,int>> conn;
 
-    // for (auto line : line_view) {
-	// 	std::cout << line<< std::endl;
-	// 	if(verticesFound){
-	// 		std::cout << "vertices found"<< std::endl;
-	// 		bool startpoint{false};
-	// 		Line mcrline2;
-	// 		if(!line.starts_with("X")&&!line.starts_with("#")){
-	// 			std::cout<<"setting points"<<std::endl;
-	// 			auto words = splitString(line, ',');
-	// 			std::pair<double,double> p(std::stod(words[0]),std::stod(words[1]));
-	// 			points.push_back(p);
-					
-	// 			// mcrline2.setEndPoint(std::stod(words[1]));
-	// 		}
-	// 	}
-		
-	// 	if(line.starts_with("#Ver")){
-	// 		verticesFound = true;
-	// 	}
-	// 	else if(line.starts_with("#Conn")){
-	// 		verticesFound = false;
-	// 		if(!line.starts_with("V")&&!line.starts_with("#")){
-	// 			std::cout<<"setting conn"<<std::endl;
-	// 			auto words = splitString(line, ',');
-	// 			std::pair<int,int> p(std::stoi(words[0]),std::stoi(words[1]));
-	// 			conn.push_back(p);
-	// 		}
-	// 	}   
-    // }
+    
 	auto it = line_view.begin();
     auto end = line_view.end();
 
@@ -307,6 +279,8 @@ int main(int, char**) {
 					conn.push_back(p);
 					std::pair<int,int> p1(std::stoi(words[1]),std::stoi(words[2]));
 					conn.push_back(p1);
+					std::pair<int,int> p2(std::stoi(words[2]),std::stoi(words[0]));
+					conn.push_back(p2);
 					it++;
 				}
 

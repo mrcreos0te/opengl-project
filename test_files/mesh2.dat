@@ -1,0 +1,12 @@
+#Nodes:4
+#Cells:2
+
+#Vertices
+0,0,0
+1,0,0
+0,1,0
+1,1,0
+
+#Connectivity
+0,1,2
+2,1,3
