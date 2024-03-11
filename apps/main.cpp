@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <ranges>
 #include "hello.h"
 
@@ -293,16 +294,126 @@ int main(int, char**) {
     
     file.close();
 
-	for(auto pair : conn){
+	
+
+	// for(auto pair : conn){
+	// 	Line line;
+	// 	std::cout<<std::endl;
+	// 	std::cout<<"startpoint: "<<points[pair.first].first<<" "<<points[pair.first].second<<std::endl;
+	// 	std::cout<<"endpoint: "<<points[pair.second].first<<" "<<points[pair.second].second<<std::endl;
+	// 	std::cout<<std::endl;
+	// 	line.setStartPoint(points[pair.first].first, points[pair.first].second);
+	// 	line.setEndPoint(points[pair.second].first, points[pair.second].second);
+	// 	lines.push_back(line);
+	// }
+
+	struct Vertex {
+    float x, y, z;
+	};
+
+	struct Triangle {
+		int v1, v2, v3;
+	};
+
+	std::ifstream inputFile("/home/janek/repos/opengl/opengl-project/opengl-proj/test_files/mesh4.dat");
+
+    if (!inputFile.is_open()) {
+        std::cerr << "Error opening the file." << std::endl;
+        return 1;
+    }
+
+    int numNodes, numCells;
+    std::string line;
+
+    // Read number of nodes and cells
+    std::getline(inputFile, line);
+    std::istringstream numNodesStream(line.substr(line.find(":") + 1));
+    numNodesStream >> numNodes;
+
+    std::getline(inputFile, line);
+    std::istringstream numCellsStream(line.substr(line.find(":") + 1));
+    numCellsStream >> numCells;
+
+    std::vector<Vertex> vertices;
+    std::vector<Triangle> triangles;
+
+    // Skip the header lines
+    std::getline(inputFile, line); // "#Vertices"
+    std::getline(inputFile, line); // Empty line
+
+    // Read vertices
+    for (int i = 0; i < numNodes; ++i) {
+        std::getline(inputFile, line);
+        std::istringstream vertexStream(line);
+		std::string token;
+		std::vector<double> coords ;
+		while (std::getline(vertexStream, token, ',')) {
+			coords.push_back(std::stod(token));
+		}
+        Vertex vertex;
+		vertex.x = coords[0];
+		vertex.y = coords[1];
+		vertex.z = coords[2];
+        // vertexStream >> vertex.x >> vertex.y >> vertex.z;
+        vertices.push_back(vertex);
+		coords.clear();
+    }
+
+    // Skip the header line
+    std::getline(inputFile, line); // "#Connectivity"
+	std::getline(inputFile, line); // "#Connectivity"
+
+    // Read connectivity
+    for (int i = 0; i < numCells; ++i) {
+        std::getline(inputFile, line);
+        std::istringstream connStream(line);
+		std::string token;
+		std::vector<int> conn ;
+		while (std::getline(connStream, token, ',')) {
+			std::cout<<"token: "<<token<<std::endl;
+			conn.push_back(std::stoi(token));
+		}
+        Triangle triangle;
+        triangle.v1 = conn[0];
+		triangle.v2 = conn[1];
+		triangle.v3 = conn[2];
+        triangles.push_back(triangle);
+    }
+
+    // Output vertices
+    std::cout << "Vertices:" << std::endl;
+    for (const auto& vertex : vertices) {
+        std::cout << "(" << vertex.x << ", " << vertex.y << ", " << vertex.z << ")" << std::endl;
+    }
+
+    // Output connectivity
+    std::cout << "Connectivity:" << std::endl;
+    for (const auto& triangle : triangles) {
+        std::cout << "(" << triangle.v1 << ", " << triangle.v2 << ", " << triangle.v3 << ")" << std::endl;
+    }
+
+    inputFile.close();
+
+	for(auto triangle : triangles){
+		
+		std::cout<<std::endl;
+		std::cout<<"startpoint: "<<vertices[triangle.v1].x<<" "<<vertices[triangle.v1].y<<std::endl;
+		std::cout<<"endpoint: "<<vertices[triangle.v2].x<<" "<<vertices[triangle.v2].y<<std::endl;
+		std::cout<<std::endl;
 		Line line;
-		std::cout<<std::endl;
-		std::cout<<"startpoint: "<<points[pair.first].first<<" "<<points[pair.first].second<<std::endl;
-		std::cout<<"endpoint: "<<points[pair.second].first<<" "<<points[pair.second].second<<std::endl;
-		std::cout<<std::endl;
-		line.setStartPoint(points[pair.first].first, points[pair.first].second);
-		line.setEndPoint(points[pair.second].first, points[pair.second].second);
+		line.setStartPoint(vertices[triangle.v1].x,vertices[triangle.v1].y);
+		line.setEndPoint(vertices[triangle.v2].x,vertices[triangle.v2].y);
 		lines.push_back(line);
+		Line line2;
+		line2.setStartPoint(vertices[triangle.v2].x,vertices[triangle.v2].y);
+		line2.setEndPoint(vertices[triangle.v3].x,vertices[triangle.v3].y);
+		lines.push_back(line2);
+		Line line3;
+		line3.setStartPoint(vertices[triangle.v3].x,vertices[triangle.v3].y);
+		line3.setEndPoint(vertices[triangle.v1].x,vertices[triangle.v1].y);
+		lines.push_back(line3);
 	}
+
 
 	// Loop until window closed
 	while (!glfwWindowShouldClose(mainWindow))
